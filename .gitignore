@@ -1,0 +1,13 @@
+node_modules
+
+/.cache
+/build
+/public/build
+/public/upload
+.env
+
+./prisma/dev.db
+./prisma/migrations/
+./prisma/back/deb.db.back
+
+TODO.md

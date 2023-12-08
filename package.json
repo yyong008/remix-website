@@ -1,0 +1,84 @@
+{
+  "name": "remix-website",
+  "version": "0.0.2",
+  "description": "A Remix WebSite",
+  "type": "module",
+  "keywords": [
+    "remix",
+    "sqlite",
+    "prisma",
+    "antd",
+    "tailwindcss"
+  ],
+  "scripts": {
+    "build": "vite build && vite build --ssr",
+    "dev": "vite dev",
+    "start": "remix-serve ./build/index.js",
+    "format": "prettier --write app/ public/locales",
+    "typecheck": "tsc",
+    "lint": "eslint ./app",
+    "seed": "esno ./prisma/seed.ts",
+    "test": "vitest",
+    "commit": "git-cz",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.2.6",
+    "@ant-design/pro-components": "^2.6.43",
+    "@prisma/client": "5.7.0",
+    "@radix-ui/react-separator": "^1.0.3",
+    "@radix-ui/react-slot": "^1.0.2",
+    "@remix-run/css-bundle": "^2.3.1",
+    "@remix-run/node": "^2.3.1",
+    "@remix-run/react": "^2.3.1",
+    "@remix-run/serve": "^2.3.1",
+    "antd": "^5.11.4",
+    "bcryptjs": "^2.4.3",
+    "crypto-js": "^4.2.0",
+    "dayjs": "^1.11.10",
+    "isbot": "^3.6.8",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remix-utils": "^7.3.0"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@remix-run/dev": "^2.3.1",
+    "@remix-run/eslint-config": "^2.3.1",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/crypto-js": "^4.2.1",
+    "@types/qs": "^6.9.10",
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "^18.2.7",
+    "autoprefixer": "^10.4.16",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^8.38.0",
+    "esno": "^4.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.1.0",
+    "prisma": "^5.7.0",
+    "tailwindcss": "^3.3.5",
+    "typescript": "^5.1.6",
+    "vite": "^5.0.4",
+    "vite-tsconfig-paths": "^4.2.1",
+    "vitest": "^1.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "lint-staged": {
+    "app/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
+}
