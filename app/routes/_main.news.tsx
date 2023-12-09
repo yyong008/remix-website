@@ -7,21 +7,30 @@ import { json } from "@remix-run/node";
 import BannerImage from "~/components/BannerImage";
 
 // hooks
-import { useLoaderData, useNavigate } from "@remix-run/react";
+import { useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
 
-import { findNewsAll } from "~/db/news";
+import { findNewsByPage } from "~/db/news";
 
 import home from "~/assets/home.jpg";
 import { formattedTime } from "~/utils/dayjs";
+import Pagination from "~/components/Pagination";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const { news, count } = await findNewsAll();
+  const url = new URL(request.url);
+  const page = url.searchParams.get("page") || 1;
+  const pageSize = url.searchParams.get("pageSize") || 10;
 
-  return json({ news, total: count });
+  const { news, count } = await findNewsByPage({
+    page: Number(page || 1),
+    pageSize: Number(pageSize || 10),
+  });
+
+  return json({ news, pageTotal: Math.floor(count / Number(pageSize)) });
 };
 
 export default function News() {
   const loaderData = useLoaderData<typeof loader>();
+  const [searchParams] = useSearchParams();
   return (
     <div>
       <BannerImage title="News" src={home} style={{ height: "200px " }} />
@@ -30,6 +39,11 @@ export default function News() {
           return <NewItems key={index} {...item} />;
         })}
       </div>
+      <Pagination
+        current={Number(searchParams.get("page")) || 1}
+        total={loaderData?.pageTotal}
+        to="news"
+      />
     </div>
   );
 }

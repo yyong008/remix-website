@@ -47,7 +47,7 @@ export const findNewsByPage = async ({
     },
   });
   const count = await prisma.news.count(); // 记录总数
-
+  console.log("count", count, news.length);
   return {
     news,
     count,

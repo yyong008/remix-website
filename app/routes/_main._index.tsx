@@ -36,7 +36,6 @@ export default function Home() {
       <Main />
       <Productions productions={productions} />
       <News news={news} />
-
       <Culture />
       <More />
     </div>

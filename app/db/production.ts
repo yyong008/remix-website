@@ -46,6 +46,8 @@ export const findProductionByPage = async ({
       id: "desc", // 这里的 'asc' 表示升序，'desc' 表示降序
     },
   });
+
+  console.log("production", (page - 1) * pageSize, pageSize, productions);
   const count = await prisma.production.count(); // 记录总数
 
   return {

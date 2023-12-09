@@ -1,17 +1,17 @@
 import { useNavigate } from "@remix-run/react";
 
-export default function ProductionCard({ item, index }: any) {
+export default function ProductionCard({ item, index, size = 33 }: any) {
   const navigate = useNavigate();
   return (
     <div
       key={index}
-      className="flex flex-col items-center py-[20px] basis-[33%] cursor-pointeri"
+      className={`flex flex-col items-center py-[20px] basis-[${size}%] cursor-pointer p-[10px]`}
       onClick={() => {
         navigate(`/production/${item.id}`);
       }}
     >
-      <div className="flex flex-col w-[450px] items-center bg-white  overflow-hidden shadow-md">
-        <div className="relative w-[450px] h-[400px]">
+      <div className="flex flex-col w-[100%] items-center bg-white  overflow-hidden shadow-md">
+        <div className="relative w-[100%] h-[400px]">
           <img
             className="w-[100%] h-[100%] object-cover"
             src={item.coverUrl}

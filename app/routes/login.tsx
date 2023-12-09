@@ -62,7 +62,7 @@ function AdminLogin() {
     <div>
       <LoginForm
         logo="/favicon.ico"
-        title="登录"
+        title="管理端"
         subTitle="用户登录"
         onFinish={onFinish}
       >
