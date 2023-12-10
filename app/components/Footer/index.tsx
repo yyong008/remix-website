@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
         {
           key: "github",
           title: <GithubOutlined />,
-          href: "https://github.com/yyong008/remix-antd-admin",
+          href: "https://github.com/yyong008/remix-website",
           blankTarget: true,
         },
         {

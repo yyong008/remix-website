@@ -67,5 +67,6 @@ PORT=3000
 └── _main._index.tsx
 ```
 
-## thanks
+# License
 
+MIT License © 2023-PRESENT Mg
