@@ -142,7 +142,7 @@ export default function MenuRoute() {
   }) => {
     await submit(
       { id: record.id, ...values },
-      { method: "PUT", encType: "multipart/form-data" }
+      { method: "PUT", encType: "multipart/form-data" },
     );
     return true;
   };
@@ -240,7 +240,7 @@ export default function MenuRoute() {
                     { id: record.id },
                     {
                       method: "DELETE",
-                    }
+                    },
                   );
                 }}
               >

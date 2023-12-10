@@ -118,7 +118,7 @@ export default function Profile() {
               email: values.email,
               avatar: values.avatar[0].url,
             } as any,
-            { method: "POST", encType: "application/json" }
+            { method: "POST", encType: "application/json" },
           );
           return Promise.resolve();
         }}

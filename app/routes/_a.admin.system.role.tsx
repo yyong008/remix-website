@@ -134,7 +134,7 @@ export default function RoleRoute() {
   }) => {
     await submit(
       { id: record.id, ...values },
-      { method: "PUT", encType: "application/json" }
+      { method: "PUT", encType: "application/json" },
     );
     return true;
   };
@@ -188,7 +188,7 @@ export default function RoleRoute() {
                     {
                       method: "DELETE",
                       encType: "application/json",
-                    }
+                    },
                   );
                 }}
               >

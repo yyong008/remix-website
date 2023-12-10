@@ -68,8 +68,8 @@ function NewItems({ coverUrl, content, title, createdAt, id }: any) {
           {formattedTime(createdAt)}
         </div>
         <div className="leading-[28px] text-gray-400">
-          {content.slice(0, 200)}
-          {content.length > 200 ? "..." : ""}
+          {content.replace(/<[^>]+>/g, "").slice(0, 200)}
+          {content.replace(/<[^>]+>/g, "").length > 200 ? "..." : ""}
         </div>
       </div>
     </div>

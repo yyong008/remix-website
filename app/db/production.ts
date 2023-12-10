@@ -47,7 +47,6 @@ export const findProductionByPage = async ({
     },
   });
 
-  console.log("production", (page - 1) * pageSize, pageSize, productions);
   const count = await prisma.production.count(); // 记录总数
 
   return {

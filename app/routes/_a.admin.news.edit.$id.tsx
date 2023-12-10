@@ -1,24 +1,23 @@
+import type { ActionFunction, LoaderFunctionArgs } from "@remix-run/node";
+
 import {
   ProCard,
   ProForm,
   ProFormText,
-  ProFormTextArea,
   ProFormUploadButton,
 } from "@ant-design/pro-components";
+import { json, redirect } from "@remix-run/node";
 import {
-  json,
-  type ActionFunction,
-  type LoaderFunctionArgs,
-  redirect,
-} from "@remix-run/node";
-import {
+  useActionData,
   useLoaderData,
   useNavigate,
   useParams,
   useSubmit,
 } from "@remix-run/react";
-import { useMemo } from "react";
-import { createNews, findNewsById } from "~/db/news";
+import { message } from "antd";
+import { useEffect, useMemo } from "react";
+import TinyMCE from "~/components/TinyMCEEditor";
+import { findNewsById, updateNewsById } from "~/db/news";
 import { storage } from "~/utils/session.server";
 
 export const action: ActionFunction = async ({ request }) => {
@@ -28,7 +27,8 @@ export const action: ActionFunction = async ({ request }) => {
   switch (method) {
     case "POST":
       try {
-        const news = await createNews({
+        const news = await updateNewsById({
+          id: dataJson.id,
           title: dataJson.title,
           content: dataJson.content,
           coverUrl: dataJson.coverUrl,
@@ -65,6 +65,7 @@ export default function NewsEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
   const loaderData = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
 
   const initialValues = useMemo(() => {
     if (loaderData && loaderData.data) {
@@ -75,8 +76,13 @@ export default function NewsEdit() {
         coverUrl: [
           {
             uid: "XX",
-            name: "xxx.png",
+            name: data.coverUrl,
             status: "done",
+            response: {
+              data: {
+                filepath: data.coverUrl,
+              },
+            },
             url: data.coverUrl,
           },
         ],
@@ -86,21 +92,28 @@ export default function NewsEdit() {
     }
   }, [loaderData]);
 
+  const onFinish = async (values: any) => {
+    const dataJson = {
+      id: Number(id),
+      title: values.title,
+      content: values.content,
+      coverUrl: values.coverUrl[0]?.response?.data?.filepath,
+    };
+    submit(dataJson, { method: "POST", encType: "application/json" });
+  };
+
+  useEffect(() => {
+    if (actionData && actionData.code === 1) {
+      message.error(actionData.message);
+    } else if (actionData && actionData.code === 0) {
+      message.info(actionData.message);
+    }
+  }, [actionData]);
+
   if (!id) {
     navigate(-1);
     return;
   }
-
-  const onFinish = async (values: any) => {
-    submit(
-      {
-        title: values.title,
-        content: values.content,
-        coverUrl: values.coverUrl[0].response.data.filepath,
-      },
-      { method: "POST", encType: "application/json" }
-    );
-  };
 
   return (
     <ProCard title="修改新闻">
@@ -109,11 +122,6 @@ export default function NewsEdit() {
           name="title"
           label="标题"
           rules={[{ required: true, message: "Please input title!" }]}
-        />
-        <ProFormTextArea
-          name="content"
-          label="内容"
-          rules={[{ required: true, message: "Please input content!" }]}
         />
         <ProFormUploadButton
           name="coverUrl"
@@ -134,7 +142,14 @@ export default function NewsEdit() {
           }}
           extra="只能上传jpg/png文件,且不大于3MB"
           rules={[{ required: true, message: "Please upload!" }]}
-        ></ProFormUploadButton>
+        />
+        <ProForm.Item
+          name="content"
+          label="内容"
+          rules={[{ required: true, message: "Please input content!" }]}
+        >
+          <TinyMCE />
+        </ProForm.Item>
       </ProForm>
     </ProCard>
   );

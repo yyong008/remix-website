@@ -44,7 +44,10 @@ export default function NewsDetail() {
         time={data.createdAt}
       />
       <div className="flex justify-center">
-        <div className="w-[80%]">{data.content}</div>
+        <div
+          className="w-[80%]"
+          dangerouslySetInnerHTML={{ __html: data.content }}
+        ></div>
       </div>
     </div>
   );

@@ -132,7 +132,7 @@ function AdminLogin() {
             style={{
               float: "right",
             }}
-            href=""
+            href="#"
           >
             忘记密码
           </a>

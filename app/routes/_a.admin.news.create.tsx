@@ -2,11 +2,13 @@ import {
   ProCard,
   ProForm,
   ProFormText,
-  ProFormTextArea,
   ProFormUploadButton,
 } from "@ant-design/pro-components";
 import { json, type ActionFunction } from "@remix-run/node";
-import { useSubmit } from "@remix-run/react";
+import { useActionData, useSubmit } from "@remix-run/react";
+import { message } from "antd";
+import { useEffect } from "react";
+import TinyMCE from "~/components/TinyMCEEditor";
 import { createNews } from "~/db/news";
 
 export const action: ActionFunction = async ({ request }) => {
@@ -33,6 +35,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function NewsEdit() {
   const submit = useSubmit();
+  const actionData = useActionData<typeof action>();
   const onFinish = async (values: any) => {
     submit(
       {
@@ -40,9 +43,18 @@ export default function NewsEdit() {
         content: values.content,
         coverUrl: values.coverUrl[0].response.data.filepath,
       },
-      { method: "POST", encType: "application/json" }
+      { method: "POST", encType: "application/json" },
     );
   };
+
+  useEffect(() => {
+    if (actionData && actionData.code === 1) {
+      message.error(actionData.message);
+    } else if (actionData && actionData.code === 0) {
+      message.info(actionData.message);
+    }
+  }, [actionData]);
+
   return (
     <ProCard title="创建新闻">
       <ProForm onFinish={onFinish}>
@@ -50,11 +62,6 @@ export default function NewsEdit() {
           name="title"
           label="标题"
           rules={[{ required: true, message: "Please input title!" }]}
-        />
-        <ProFormTextArea
-          name="content"
-          label="内容"
-          rules={[{ required: true, message: "Please input content!" }]}
         />
         <ProFormUploadButton
           name="coverUrl"
@@ -75,7 +82,14 @@ export default function NewsEdit() {
           }}
           extra="只能上传jpg/png文件,且不大于3MB"
           rules={[{ required: true, message: "Please upload image!" }]}
-        ></ProFormUploadButton>
+        />
+        <ProForm.Item
+          name="content"
+          label="内容"
+          rules={[{ required: true, message: "Please input content!" }]}
+        >
+          <TinyMCE />
+        </ProForm.Item>
       </ProForm>
     </ProCard>
   );

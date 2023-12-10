@@ -5,6 +5,7 @@ import {
   useActionData,
   useLoaderData,
   useNavigate,
+  useSearchParams,
   useSubmit,
 } from "@remix-run/react";
 import { json, redirect } from "@remix-run/node";
@@ -17,7 +18,7 @@ import { ModalForm, ProFormText, ProTable } from "@ant-design/pro-components";
 import {
   createNews,
   deleteNewsById,
-  findNewsAll,
+  findNewsByPage,
   updateNewsById,
 } from "~/db/news";
 import { storage } from "~/utils/session.server";
@@ -72,7 +73,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return redirect("/login");
   }
 
-  const { news, count } = await findNewsAll();
+  const url = new URL(request.url);
+  const page = url.searchParams.get("page") || 1;
+  const pageSize = url.searchParams.get("pageSize") || 20;
+
+  const { news, count } = await findNewsByPage({
+    page: Number(page),
+    pageSize: Number(pageSize) === 0 ? Number(pageSize) : 20,
+  });
 
   return json({ dataSource: news, total: count });
 };
@@ -80,6 +88,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function NewsRoute() {
   const navigate = useNavigate();
   const submit = useSubmit();
+  const [searchParams] = useSearchParams();
+  const page = searchParams.get("page");
+  const pageSize = searchParams.get("pageSize");
   const actionData = useActionData<typeof action>();
   const { dataSource = [], total = 0 } = useLoaderData<typeof loader>();
 
@@ -97,7 +108,7 @@ export default function NewsRoute() {
   }) => {
     await submit(
       { id: record.id, ...values },
-      { method: "PUT", encType: "application/json" }
+      { method: "PUT", encType: "application/json" },
     );
     return true;
   };
@@ -113,16 +124,6 @@ export default function NewsRoute() {
       key: "id",
     },
     {
-      title: "title",
-      dataIndex: "title",
-      key: "title",
-    },
-    {
-      title: "Content",
-      dataIndex: "content",
-      key: "content",
-    },
-    {
       title: "coverUrl",
       dataIndex: "coverUrl",
       key: "coverUrl",
@@ -130,6 +131,28 @@ export default function NewsRoute() {
         return <Image src={record.coverUrl} width={100} />;
       },
     },
+    {
+      title: "title",
+      dataIndex: "title",
+      key: "title",
+      render(_: any, record: any) {
+        return <div>{record.title.slice(0, 10)}</div>;
+      },
+    },
+    {
+      title: "Content",
+      dataIndex: "content",
+      key: "content",
+      render(_: any, record: any) {
+        return (
+          <div>
+            {record.content.slice(0, 40)}
+            {record.content.length > 40 ? "..." : ""}
+          </div>
+        );
+      },
+    },
+
     {
       title: "操作",
       render(_: any, record: any) {
@@ -156,7 +179,7 @@ export default function NewsRoute() {
                     {
                       method: "DELETE",
                       encType: "application/json",
-                    }
+                    },
                   );
                 }}
               >
@@ -186,7 +209,6 @@ export default function NewsRoute() {
             type="primary"
             key={"create"}
             onClick={() => {
-              // setShowCreateModel(!showCreateModel);
               navigate("/admin/news/create");
             }}
           >
@@ -195,12 +217,12 @@ export default function NewsRoute() {
         ]}
         pagination={{
           total,
-          defaultPageSize: 9999,
-          pageSize: 99999,
-          // current: Number(searchParams.get("page") || 1),
-          // onChange(page, pageSize) {
-          //   navigate(`/role?page=${page}&pageSize=${pageSize}`);
-          // },
+          defaultCurrent: page ? Number(page) : 1,
+          current: page ? Number(page) : 1,
+          pageSize: pageSize ? Number(pageSize) : 20,
+          onChange(page, pageSize) {
+            navigate(`/admin/news/list?page=${page}&pageSize=${pageSize}`);
+          },
         }}
         key="id"
       />

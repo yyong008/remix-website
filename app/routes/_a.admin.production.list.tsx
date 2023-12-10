@@ -97,7 +97,7 @@ export default function ProductionRoute() {
   }) => {
     await submit(
       { id: record.id, ...values },
-      { method: "PUT", encType: "application/json" }
+      { method: "PUT", encType: "application/json" },
     );
     return true;
   };
@@ -166,7 +166,7 @@ export default function ProductionRoute() {
                     {
                       method: "DELETE",
                       encType: "application/json",
-                    }
+                    },
                   );
                 }}
               >

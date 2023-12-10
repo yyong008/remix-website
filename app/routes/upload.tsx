@@ -23,11 +23,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         file: ({ filename }) => filename,
         directory: process.cwd() + "/public/upload",
       }),
-      unstable_createMemoryUploadHandler()
+      unstable_createMemoryUploadHandler(),
     );
     const formData = await unstable_parseMultipartFormData(
       request,
-      uploadHandler
+      uploadHandler,
     );
 
     const file = formData.get("file") as any;

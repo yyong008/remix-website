@@ -1,4 +1,3 @@
-import * as Icons from "@ant-design/icons";
 import { ClientOnly } from "remix-utils/client-only";
 import { Form } from "antd";
 import { useMemo } from "react";

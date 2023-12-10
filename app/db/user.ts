@@ -35,7 +35,7 @@ export const findUserByName = async (name: string) => {
 
 export const findUserByNamePassword = async (
   name: string,
-  password: string
+  password: string,
 ) => {
   return prisma.user.findUnique({
     where: { name, password },

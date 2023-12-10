@@ -36,7 +36,7 @@ export const AvatarDropDown: React.FC<AvatarDropDownProps> = ({
                     action: "/logout",
                     method: "POST",
                     encType: "application/json",
-                  }
+                  },
                 );
               },
             },

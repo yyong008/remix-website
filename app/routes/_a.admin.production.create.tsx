@@ -40,7 +40,7 @@ export default function NewsEdit() {
         desc: values.desc,
         coverUrl: values.coverUrl[0].response.data.filepath,
       },
-      { method: "POST", encType: "application/json" }
+      { method: "POST", encType: "application/json" },
     );
   };
   return (
