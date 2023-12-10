@@ -42,9 +42,11 @@ export default function ProductionDetail() {
         src={data.coverUrl}
         style={{ height: "300px " }}
       />
-      <div>
-        <h1>{data.name}</h1>
-        <div>{data.desc}</div>
+      <div className="flex justify-center">
+        <div
+          className="w-[80%]"
+          dangerouslySetInnerHTML={{ __html: data.desc }}
+        ></div>
       </div>
     </div>
   );

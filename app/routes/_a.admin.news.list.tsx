@@ -146,8 +146,8 @@ export default function NewsRoute() {
       render(_: any, record: any) {
         return (
           <div>
-            {record.content.slice(0, 40)}
-            {record.content.length > 40 ? "..." : ""}
+            {record.content.replace(/<[^>]+>/g, "").slice(0, 40)}
+            {record.content.replace(/<[^>]+>/g, "").length > 40 ? "..." : ""}
           </div>
         );
       },

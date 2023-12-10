@@ -2,11 +2,13 @@ import {
   ProCard,
   ProForm,
   ProFormText,
-  ProFormTextArea,
   ProFormUploadButton,
 } from "@ant-design/pro-components";
 import { json, type ActionFunction } from "@remix-run/node";
-import { useSubmit } from "@remix-run/react";
+import { useActionData, useSubmit } from "@remix-run/react";
+import { message } from "antd";
+import { useEffect } from "react";
+import TinyMCE from "~/components/TinyMCEEditor";
 import { createProduction } from "~/db/production";
 
 export const action: ActionFunction = async ({ request }) => {
@@ -33,6 +35,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function NewsEdit() {
   const submit = useSubmit();
+  const actionData = useActionData<typeof action>();
   const onFinish = async (values: any) => {
     submit(
       {
@@ -43,17 +46,21 @@ export default function NewsEdit() {
       { method: "POST", encType: "application/json" },
     );
   };
+
+  useEffect(() => {
+    if (actionData && actionData.code === 1) {
+      message.error(actionData.message);
+    } else if (actionData && actionData.code === 0) {
+      message.info(actionData.message);
+    }
+  }, [actionData]);
+
   return (
     <ProCard title="创建产品">
       <ProForm onFinish={onFinish}>
         <ProFormText
           name="name"
           label="产品名"
-          rules={[{ required: true, message: "Please input desc!" }]}
-        />
-        <ProFormTextArea
-          name="desc"
-          label="描述"
           rules={[{ required: true, message: "Please input desc!" }]}
         />
         <ProFormUploadButton
@@ -76,6 +83,13 @@ export default function NewsEdit() {
           extra="只能上传jpg/png文件,且不大于3MB"
           rules={[{ required: true, message: "Please upload image!" }]}
         />
+        <ProForm.Item
+          name="desc"
+          label="描述"
+          rules={[{ required: true, message: "Please input desc!" }]}
+        >
+          <TinyMCE />
+        </ProForm.Item>
       </ProForm>
     </ProCard>
   );

@@ -5,6 +5,7 @@ import {
   useActionData,
   useLoaderData,
   useNavigate,
+  useSearchParams,
   useSubmit,
 } from "@remix-run/react";
 import { json, redirect } from "@remix-run/node";
@@ -17,12 +18,12 @@ import { ModalForm, ProFormText, ProTable } from "@ant-design/pro-components";
 import {
   createProduction,
   deleteProductionById,
-  findProductionAll,
+  findProductionByPage,
   updateProductionById,
 } from "~/db/production";
 import { storage } from "~/utils/session.server";
 
-const { DeleteOutlined, EditOutlined } = _icons;
+const { DeleteOutlined, EditOutlined, EyeOutlined } = _icons;
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const method = request.method;
@@ -72,7 +73,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return redirect("/login");
   }
 
-  const { productions, count } = await findProductionAll();
+  const url = new URL(request.url);
+  const page = url.searchParams.get("page") || 1;
+  const pageSize = url.searchParams.get("pageSize") || 20;
+
+  const { productions, count } = await findProductionByPage({
+    page: Number(page),
+    pageSize: Number(pageSize) === 0 ? Number(pageSize) : 20,
+  });
 
   return json({ dataSource: productions, total: count });
 };
@@ -80,6 +88,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function ProductionRoute() {
   const submit = useSubmit();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const page = searchParams.get("page");
+  const pageSize = searchParams.get("pageSize");
   const actionData = useActionData<typeof action>();
   const { dataSource = [], total = 0 } = useLoaderData<typeof loader>();
 
@@ -138,12 +149,28 @@ export default function ProductionRoute() {
       title: "Desc",
       dataIndex: "desc",
       key: "desc",
+      render(_: any, record: any) {
+        return (
+          <div>
+            {record.desc.replace(/<[^>]+>/g, "").slice(0, 40)}
+            {record.desc.replace(/<[^>]+>/g, "").length > 40 ? "..." : ""}
+          </div>
+        );
+      },
     },
     {
       title: "操作",
       render(_: any, record: any) {
         return (
           <Space size="large">
+            <Button
+              shape="circle"
+              type="primary"
+              icon={<EyeOutlined />}
+              onClick={() => {
+                navigate("/production/" + record.id);
+              }}
+            ></Button>
             <Button
               shape="circle"
               type="primary"
@@ -186,6 +213,8 @@ export default function ProductionRoute() {
   useEffect(() => {
     if (actionData && actionData.code === 1) {
       message.error(actionData.message);
+    } else if (actionData && actionData.code === 0) {
+      message.info(actionData.message);
     }
   }, [actionData]);
 
@@ -209,12 +238,12 @@ export default function ProductionRoute() {
         ]}
         pagination={{
           total,
-          defaultPageSize: 9999,
-          pageSize: 99999,
-          // current: Number(searchParams.get("page") || 1),
-          // onChange(page, pageSize) {
-          //   navigate(`/role?page=${page}&pageSize=${pageSize}`);
-          // },
+          defaultCurrent: page ? Number(page) : 1,
+          current: page ? Number(page) : 1,
+          pageSize: pageSize ? Number(pageSize) : 20,
+          onChange(page, pageSize) {
+            navigate(`/admin/news/list?page=${page}&pageSize=${pageSize}`);
+          },
         }}
         key="id"
       />
