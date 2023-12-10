@@ -8,6 +8,31 @@
 - TailwindCSS (client)
 - Antd (manage)
 
+
+## 使用
+
+```sh
+git clone https://github.com/yyong008/remix-website.git
+
+
+pnpm i
+
+npx prisma migrate dev
+
+pnpm run seed # 生成的数据较多
+
+pnpm run dev # dev
+```
+
+## .env
+
+```
+DATABASE_URL="file:./dev.db"
+
+SESSION_SECRET="your session secret"
+PORT=3000
+```
+
 ## routes
 
 ```sh
@@ -42,24 +67,5 @@
 └── _main._index.tsx
 ```
 
-本项目实现了官网的项目
+## thanks
 
-## 使用
-
-```sh
-pnpm i
-
-pnpm run seed # 生成的数据较多
-
-pnpm run dev # dev
-```
-
-## .env
-
-```
-
-DATABASE_URL="file:./dev.db"
-
-SESSION_SECRET="your session secret"
-PORT=3000
-```
