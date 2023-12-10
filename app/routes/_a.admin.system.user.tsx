@@ -5,7 +5,6 @@ import {
   useActionData,
   useLoaderData,
   useNavigate,
-  useParams,
   useSearchParams,
   useSubmit,
 } from "@remix-run/react";
@@ -108,7 +107,7 @@ export default function UserRoute() {
   }) => {
     await submit(
       { id: record.id, ...values },
-      { method: "PUT", encType: "application/json" }
+      { method: "PUT", encType: "application/json" },
     );
     return true;
   };
@@ -195,7 +194,7 @@ export default function UserRoute() {
                     {
                       method: "DELETE",
                       encType: "application/json",
-                    }
+                    },
                   );
                 }}
               >
