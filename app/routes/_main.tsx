@@ -10,8 +10,8 @@ import ScrollTop from "~/components/ScrollTop";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Remix antd admin template" },
-    { name: "template", content: "Remix antd admin" },
+    { title: "Remix Website template" },
+    { name: "template", content: "Remix Website" },
   ];
 };
 
@@ -43,7 +43,16 @@ export default function Index() {
 function Header() {
   return (
     <div className="w-full h-[80px] flex align-center justify-between px-[80px]">
-      <span className="font-bold">RAA</span>
+      <NavLink to="/">
+        <div className="flex justify-center items-center font-bold scale-50">
+          <img
+            className="w-[30px] h-[30px] mr-[10px]"
+            src="/favicon.ico"
+            alt=""
+          />
+          <span>Remix Website</span>
+        </div>
+      </NavLink>
       <span className="font-bold">
         <span className="mx-[10px]">
           <NavLink
@@ -111,7 +120,7 @@ function Header() {
 function CopyRight() {
   return (
     <div className="text-center text-slate-300 text-xs">
-      Copyright @ {new Date().getFullYear()} RAA All rights reserved.
+      Copyright @ {new Date().getFullYear()} Remix Website All rights reserved.
     </div>
   );
 }

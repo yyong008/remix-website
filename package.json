@@ -1,7 +1,7 @@
 {
   "name": "remix-website",
   "version": "0.0.2",
-  "description": "A Remix WebSite",
+  "description": "A Remix Website",
   "type": "module",
   "keywords": [
     "remix",

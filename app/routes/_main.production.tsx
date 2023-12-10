@@ -39,18 +39,20 @@ export default function ProductionRoute() {
   return (
     <div>
       <BannerImage title="Production" src={home} style={{ height: "200px " }} />
-      <div className="flex flex-wrap w-[90%]  mx-auto mt-16">
-        {loaderData?.productions?.map((item: any, index: number) => {
-          return (
-            <ProductionCard
-              key={index}
-              item={item}
-              index={index}
-              size={20}
-              to="production"
-            />
-          );
-        })}
+      <div className="flex flex-wrap justify-center w-[100%] items-center mt-16">
+        <div className="flex flex-wrap w-[95%]">
+          {loaderData?.productions?.map((item: any, index: number) => {
+            return (
+              <ProductionCard
+                key={index}
+                item={item}
+                index={index}
+                size={20}
+                to="production"
+              />
+            );
+          })}
+        </div>
       </div>
       <Pagination
         current={Number(searchParams.get("page")) || 1}

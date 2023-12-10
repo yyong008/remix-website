@@ -1,4 +1,4 @@
-# Remix WebSite
+# Remix Website
 
 本项目是一个全栈项目，基于一下的技术：
 

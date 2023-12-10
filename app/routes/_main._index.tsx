@@ -47,9 +47,7 @@ function Main() {
     <div className="relative w-[100%] h-[800px] overflow-hidden">
       <img src="/images/logo.png" alt="" />
       <div className="absolute top-[200px] left-[100px]">
-        <div className="text-blue-500 font-bold text-[60px]">
-          Remix Antd Admin
-        </div>
+        <div className="text-blue-500 font-bold text-[60px]">Remix Website</div>
         <div className="text-gray-300 text-[20px]">
           一个使用了 Remix 作为技术栈的模板
         </div>
